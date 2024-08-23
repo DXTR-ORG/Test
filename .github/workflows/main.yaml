@@ -15,6 +15,7 @@
 #         uses: actions/checkout@v3
 
 #       - name: Print a message
+
 #         run: echo "This is a dummy workflow step"
 
 #       - name: Simulate a build process
