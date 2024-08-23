@@ -1,0 +1,30 @@
+name: Dummy Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Print a message
+        run: echo "This is a dummy workflow step"
+
+      - name: Simulate a build process
+        run: |
+          echo "Building the project..."
+          sleep 2
+          echo "Build complete!"
+
+      - name: Run unit tests
+        run: |
+          echo "Running tests..."
+          sleep 2
+          echo "All tests passed!"
