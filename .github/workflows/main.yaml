@@ -26,6 +26,7 @@
 #       - name: Run unit tests
 #         run: |
 #           echo "Running tests..."
+
 #           sleep 2
 #           echo "All tests passed!"
 
@@ -46,7 +47,7 @@ jobs:
           if [ -f test.txt ]; then
             echo "Failing the build because 'fail_this_build.txt' exists."
             exit 1
-            
+
           fi
 
 
