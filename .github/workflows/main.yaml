@@ -19,6 +19,7 @@ jobs:
 
       - name: Simulate a build process
         run: |
+        
           echo "Building the project..."
           sleep 2
           echo "Build complete!"
