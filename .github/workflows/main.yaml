@@ -1,6 +1,10 @@
-name: Example Workflow
+name: Dummy Workflow
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
   build:
@@ -10,11 +14,38 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Check for failure file
-        run: |
-          if [ -f test.txt ]; then
-            echo "Failing the build because 'fail_this_build.txt' exists."
-            exit 1
-          fi
+      - name: Print a message
+        run: echo "This is a dummy workflow step"
 
-      # Add other steps here
+      - name: Simulate a build process
+        run: |
+          echo "Building the project..."
+          sleep 2
+          echo "Build complete!"
+
+      - name: Run unit tests
+        run: |
+          echo "Running tests..."
+          sleep 2
+          echo "All tests passed!"
+
+# name: Example Workflow
+
+# on: [push]
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       - name: Check for failure file
+#         run: |
+#           if [ -f test.txt ]; then
+#             echo "Failing the build because 'fail_this_build.txt' exists."
+#             exit 1
+#           fi
+
+#       # Add other steps here
