@@ -1,10 +1,6 @@
-name: Dummy Workflow
+name: Example Workflow
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
+on: [push]
 
 jobs:
   build:
@@ -14,17 +10,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Print a message
-        run: echo "This is a dummy workflow step"
-
-      - name: Simulate a build process
+      - name: Check for failure file
         run: |
-          echo "Building the project..."
-          sleep 2
-          echo "Build complete!"
+          if [ -f fail_this_build.txt ]; then
+            echo "Failing the build because 'fail_this_build.txt' exists."
+            exit 1
+          fi
 
-      - name: Run unit tests
-        run: |
-          echo "Running tests..."
-          sleep 2
-          echo "All tests passed!"
+      # Add other steps here
