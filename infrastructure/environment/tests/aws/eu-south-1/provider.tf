@@ -1,17 +1,5 @@
-provider "aws" {
-  region = "eu-south-1"
-
-  allowed_account_ids = []
-
-  default_tags {
-    tags = {
-      environment_name = "tests"
-      
-      region = "eu-south-1"
-      
-      layer_name = "tests-eu-south-1"
-      
-      cluster = module.k8scluster.k8s_cluster_name
-    }
-  }
+# Output values are used to export and print information about your infrastructure
+output "example_output" {
+  value = "example_value"
+  description = "This output demonstrates an example output value."
 }
