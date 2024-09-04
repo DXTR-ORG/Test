@@ -1,11 +1,10 @@
-
 terraform {
   required_version = ">= 1.3.0"
 
   backend "s3" {
     bucket         = "tests-sa-east-1-tfstate"
-    key            = "tests-sa-east-1-tfstate"
-    region         = "tests"
+    key            = "tests-sa-east-1.tfstate"
+    region         = "sa-east-1"
     dynamodb_table = "tests-sa-east-1-tfstate"
     encrypt        = true
   }
