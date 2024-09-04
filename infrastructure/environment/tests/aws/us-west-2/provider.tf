@@ -1,7 +1,9 @@
 provider "aws" {
-  region               = "us-west-2"
-  allowed_account_ids  = [""]
+  region = "us-west-2"
   
+  # Ensure that the allowed account IDs are specified correctly
+  allowed_account_ids = ["123456789012"]
+
   default_tags {
     tags = {
       environment_name = "tests"
@@ -11,12 +13,3 @@ provider "aws" {
     }
   }
 }
-
-# The provider block configures the specified provider (aws in this case).
-# - region: The AWS region to operate in.
-# - allowed_account_ids: List of allowed AWS account IDs.
-# - default_tags: Tags to apply to all resources managed by this provider.
-#     - environment_name: Name of the environment.
-#     - region: AWS region.
-#     - layer_name: Name identifier for the deployment layer.
-#     - cluster: Cluster name fetched from the k8scluster module.
