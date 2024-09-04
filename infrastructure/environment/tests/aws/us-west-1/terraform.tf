@@ -12,16 +12,12 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.62"
+      version = "5.62.0"
     }
 
     helm = {
       source  = "hashicorp/helm"
-      version = "~> 2.14"
+      version = "2.14.1"
     }
   }
 }
-
-# Terraform configuration that sets up the required version, backend configuration for state storage in S3, and required providers for AWS and Helm.
-# The backend configuration stores the state file in an S3 bucket with DynamoDB for state locking and state consistency.
-# The AWS provider is sourced from HashiCorp and the Helm provider is used to manage Kubernetes packages.
