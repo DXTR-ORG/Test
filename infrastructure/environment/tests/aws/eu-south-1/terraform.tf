@@ -1,23 +1,6 @@
-terraform {
-  required_version = ">= 1.3.0"
+# This Terraform configuration defines an output block. The block is currently empty and should contain valid outputs.
 
-  backend "s3" {
-    bucket         = "tests-eu-south-1-tfstate"
-    key            = "tests-eu-south-1.tfstate"
-    region         = "eu-south-1"
-    dynamodb_table = "tests-eu-south-1-tfstate"
-    encrypt        = true
-  }
-
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "5.62.0"
-    }
-
-    helm = {
-      source  = "hashicorp/helm"
-      version = "2.14.1"
-    }
-  }
+output "example_output" {
+  description = "An example output value"
+  value       = "example_value"
 }
