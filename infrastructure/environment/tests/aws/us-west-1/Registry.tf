@@ -22,9 +22,6 @@ terraform {
   }
 }
 
-# Terraform configuration to:
-# - Set the required Terraform version
-# - Configure the S3 backend for state file storage with state locking via DynamoDB
-# - Specify required providers:
-#   - AWS provider from HashiCorp at version ~> 5.62
-#   - Helm provider from HashiCorp at version ~> 2.14
+# Terraform configuration that sets up the required version, backend configuration for state storage in S3, and required providers for AWS and Helm.
+# The backend configuration stores the state file in an S3 bucket with DynamoDB for state locking and state consistency.
+# The AWS provider is sourced from HashiCorp and the Helm provider is used to manage Kubernetes packages.
