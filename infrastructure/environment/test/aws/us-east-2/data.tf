@@ -2,6 +2,10 @@ data "aws_caller_identity" "provider" {}
 
 data "aws_region" "provider" {}
 
+data "aws_eks_cluster_auth" "k8s" {
+  name = data.terraform_remote_state.parent.outputs.k8s_cluster_name
+}
+
 data "terraform_remote_state" "parent" {
   backend = "s3"
 
@@ -12,8 +16,4 @@ data "terraform_remote_state" "parent" {
     dynamodb_table = "test-us-east-2-tfstate"
     encrypt        = true
   }
-}
-
-data "aws_eks_cluster_auth" "k8s" {
-  name = data.terraform_remote_state.parent.outputs.k8s_cluster_name
 }
