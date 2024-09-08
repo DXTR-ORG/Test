@@ -21,3 +21,8 @@ terraform {
     }
   }
 }
+
+# This Terraform configuration specifies a required Terraform version of 1.3.0 or greater.
+# It also sets up the backend to use Amazon S3 for the Terraform state storage,
+# and locks the state file with a DynamoDB table. Encryption for the S3 bucket is enabled.
+# Additionally, it specifies required providers and their versions for AWS and Helm.
