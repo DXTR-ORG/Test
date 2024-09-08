@@ -1,6 +1,10 @@
-data "aws_caller_identity" "current" {}
+data "aws_caller_identity" "provider" {}
 
-data "aws_region" "current" {}
+data "aws_region" "provider" {}
+
+data "aws_eks_cluster_auth" "k8s" {
+  name = data.terraform_remote_state.parent.outputs.k8s_cluster_name
+}
 
 data "terraform_remote_state" "parent" {
   backend = "s3"
@@ -14,12 +18,8 @@ data "terraform_remote_state" "parent" {
   }
 }
 
-data "aws_eks_cluster_auth" "k8s" {
-  name = data.terraform_remote_state.parent.outputs.k8s_cluster_name
-}
-
-# This Terraform code defines several data sources:
-# - "aws_caller_identity": fetches information about the AWS account invoking the Terraform code.
-# - "aws_region": retrieves the AWS region in use.
-# - "terraform_remote_state": fetches the state from a remote S3 backend.
-# - "aws_eks_cluster_auth": retrieves authentication information for an EKS cluster using data from the remote state.
+# Documentation:
+# - `data "aws_caller_identity"`: Fetches information about the AWS account and caller identity.
+# - `data "aws_region"`: Retrieves the AWS region from the current provider configuration.
+# - `data "aws_eks_cluster_auth"`: Obtains authentication token for an EKS cluster. It uses the cluster name provided by the parent remote state.
+# - `data "terraform_remote_state"`: Fetches Terraform remote state data from an S3 bucket. Configuration includes bucket name, key, region, DynamoDB table, and encryption settings.
