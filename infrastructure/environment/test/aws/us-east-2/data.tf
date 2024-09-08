@@ -2,11 +2,7 @@ data "google_client_openid_userinfo" "me" {}
 
 data "google_container_cluster" "k8s" {
   name     = module.k8scluster.k8s_cluster_name
-  location = "us-east1"
+  location = "us-east-2"
 }
 
-# Data source to retrieve user information from Google OpenID Connect
-# This resource fetches the OpenID Connect information for the authenticated user
-
-# Data source to retrieve GCP Kubernetes Cluster information
-# This fetches information about a GKE cluster specified by the name and location
+# This Terraform configuration retrieves the OpenID user information of the authenticated Google Cloud client and fetches details of a Google Kubernetes Engine (GKE) cluster in the specified location. The cluster name is sourced from the output of a separate module named `k8scluster`.
