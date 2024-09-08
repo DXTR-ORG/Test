@@ -1,15 +1,19 @@
-data "google_client_openid_userinfo" "me" {}
+data "aws_caller_identity" "current" {}
 
-data "google_container_cluster" "k8s" {
-  name     = module.k8scluster.k8s_cluster_name
-  location = "us-central1" # Example location, replace with the correct region
+data "aws_region" "current" {}
+
+data "aws_eks_cluster_auth" "k8s" {
+  name = data.terraform_remote_state.parent.outputs.k8s_cluster_name
 }
 
-# Data resource to fetch the OpenID user information for the authenticated client
-data "google_client_openid_userinfo" "me" {}
+data "terraform_remote_state" "parent" {
+  backend = "s3"
 
-# Data resource to fetch details of a specific GKE (Google Kubernetes Engine) cluster
-data "google_container_cluster" "k8s" {
-  name     = module.k8scluster.k8s_cluster_name  # Cluster name retrieved from a module output
-  location = "us-central1"   # Location of the GKE cluster, replace with the correct region
+  config = {
+    bucket         = "test-us-east-2-tfstate"
+    key            = "test-us-east-2.tfstate"
+    region         = "us-east-2"
+    dynamodb_table = "test-us-east-2-tfstate"
+    encrypt        = true
+  }
 }
