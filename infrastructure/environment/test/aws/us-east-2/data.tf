@@ -1,18 +1,17 @@
-data "google_client_openid_userinfo" "me" {}
+data "aws_caller_identity" "provider" {}
 
-data "google_container_cluster" "k8s" {
-  name     = module.k8scluster.k8s_cluster_name
-  location = "us-east1"
+data "aws_region" "provider" {}
+
+data "aws_eks_cluster_auth" "k8s" {
+  name = module.k8scluster.k8s_cluster_name
 }
 
-# This data source retrieves the OpenID Connect user info for the active Google Cloud credentials.
-# data "google_client_openid_userinfo" "me" {}
+# Fetches details about the IAM identity that is making the AWS request.
+# This data source is useful to identify the AWS account details such as Account ID, ARN, and User ID.
 
-# This data source retrieves information about a Google Kubernetes Engine (GKE) cluster.
-# Inputs:
-# - `name`: The name of the GKE cluster, fetched from the output of the `k8scluster` module.
-# - `location`: The location/region of the GKE cluster.
-# data "google_container_cluster" "k8s" {
-#   name     = module.k8scluster.k8s_cluster_name
-#   location = "us-east1"
-# }
+# Fetches the region information in which the infrastructure is being provisioned.
+# Useful for obtaining the region name dynamically.
+
+# Fetches authentication information for an EKS cluster.
+# `name` is the name of the EKS cluster for which we need the authentication info.
+# This data source is necessary for authenticating with the cluster using kubectl and other Kubernetes tools.
