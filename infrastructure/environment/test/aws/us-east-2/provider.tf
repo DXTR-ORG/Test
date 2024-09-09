@@ -1,13 +1,5 @@
-provider "helm" {
-  kubernetes {
-    host                   = "https://${data.k8scluster.k8s.endpoint}"
-    cluster_ca_certificate = base64decode(module.k8scluster.k8s_ca_data)
-    token                  = data.aws_eks_cluster_auth.k8s.token
-  }
-}
-
 provider "aws" {
-  region = "us-east-2"
+  region              = "us-east-2"
   allowed_account_ids = ["992382730686"]
 
   default_tags {
@@ -15,7 +7,17 @@ provider "aws" {
       environment_name = "test"
       region           = "us-east-2"
       layer_name       = "test-us-east-2"
-      cluster          = module.k8scluster.k8s_cluster_name
     }
   }
 }
+
+# Providers Configuration
+# This section specifies the provider details for AWS.
+# - region: Specifies the AWS region to use.
+# - allowed_account_ids: The list of allowed AWS account IDs.
+
+# Default Tags
+# This block sets default tags for every resource created by this provider.
+# - environment_name: Tag to identify the environment.
+# - region: Tag to specify the region.
+# - layer_name: Custom tag to identify the specific layer.
