@@ -2,8 +2,8 @@ terraform {
   required_version = ">= 1.3.0"
 
   backend "s3" {
-    bucket  = "staging-us-west-1-tfstate"
-    key     = "staging-us-west-1.tfstate"
+    bucket  = "sdsd-us-west-1-tfstate"
+    key     = "sdsd-us-west-1.tfstate"
     region  = "us-west-1"
     encrypt = true
   }
@@ -20,3 +20,7 @@ terraform {
     }
   }
 }
+
+# The Terraform block sets the required version of Terraform,
+# configures the backend to use Amazon S3 for state storage,
+# and specifies the required providers with their versions.
