@@ -2,9 +2,9 @@ terraform {
   required_version = ">= 1.3.0"
 
   backend "s3" {
-    bucket  = "test-us-east-2-tfstate"
-    key     = "test-us-east-2.tfstate"
-    region  = "us-east-2"
+    bucket = "test-us-east-2-tfstate"
+    key    = "test-us-east-2.tfstate"
+    region = "us-east-2"
     encrypt = true
   }
 
@@ -21,8 +21,5 @@ terraform {
   }
 }
 
-# Terraform Configuration for S3 Backend and Providers
-# 
-# Ensures Terraform version is 1.3.0 or higher.
-# Configures S3 backend for storing Terraform state with encryption.
-# Specifies required providers (AWS and Helm) with their versions.
+# This configuration sets the required Terraform version and S3 backend for remote state storage.
+# It also specifies the required providers (aws and helm) along with their versions.
