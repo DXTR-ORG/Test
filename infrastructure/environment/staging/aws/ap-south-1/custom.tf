@@ -1,35 +1,15 @@
-variable "node_type" {
-  type    = string
-  default = "cache.m4.large"
+# This Terraform configuration creates an AWS EC2 instance in a specified region.
+# The instance type, AMI ID, and tags can be customized as needed.
+
+provider "aws" {
+  region = "us-west-2"
 }
 
-resource "random_password" "redis_auth" {
-  length  = 20
-  special = false
-}
+resource "aws_instance" "example" {
+  ami           = "ami-12345678" # Replace with a valid AMI ID
+  instance_type = "t2.micro"
 
-resource "aws_elasticache_replication_group" "redis_cluster" {
-  replication_group_id          = "my-redis-cluster"
-  replication_group_description = "Redis replication group"
-  node_type                     = var.node_type
-  number_cache_clusters         = 1
-  automatic_failover_enabled    = true
-  auth_token                    = random_password.redis_auth.result
-
-  # Additional required attributes might be necessary here
-  engine                        = "redis"
-  engine_version                = "6.x"
-  parameter_group_name          = "default.redis6.x"
-  port                          = 6379
-  at_rest_encryption_enabled    = true
-  transit_encryption_enabled    = true
-}
-
-data "aws_kms_key" "main" {
-  key_id = "alias/opta-${var.env_name}"
-}
-
-output "cache_auth_token" {
-  value     = aws_elasticache_replication_group.redis_cluster.auth_token
-  sensitive = true
+  tags = {
+    Name = "example-instance"
+  }
 }
