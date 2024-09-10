@@ -2,5 +2,12 @@ data "aws_caller_identity" "current" {}
 
 data "aws_region" "current" {}
 
-# The aws_caller_identity data source retrieves the AWS account ID, user ID, and ARN of the current caller.
-# The aws_region data source retrieves the name of the current region.
+# This block retrieves information about the AWS account associated with the provided credentials
+data "aws_caller_identity" "current" {
+  # No configuration options are required for this data source
+}
+
+# This block retrieves the current AWS region
+data "aws_region" "current" {
+  # No configuration options are required for this data source
+}
