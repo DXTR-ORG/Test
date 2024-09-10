@@ -1,32 +1,32 @@
 module "aws_base" {
-  # Environment name
+  # Name of the environment
   env_name = "staging-ap-south-1"
 
-  # Layer name
+  # Name of the layer
   layer_name = "staging-ap-south-1"
 
-  # Module name
+  # Name of the module
   module_name = "AWS Base"
 
   # CIDR blocks for private subnets
   private_ipv4_cidr_blocks = ["10.0.128.0/21", "10.0.136.0/21", "10.0.144.0/21"]
 
-  # Private subnet IDs (to be defined)
-  private_subnet_ids = []
+  # Private subnet IDs (provide the correct values)
+  private_subnet_ids = "f"
 
   # CIDR blocks for public subnets
   public_ipv4_cidr_blocks = ["10.0.0.0/21", "10.0.8.0/21", "10.0.16.0/21"]
 
-  # Public subnet IDs (to be defined)
-  public_subnet_ids = []
+  # Public subnet IDs (provide the correct values)
+  public_subnet_ids = "gdf"
 
-  # Total IPv4 CIDR block for the VPC
+  # Total CIDR block for the VPC
   total_ipv4_cidr_block = "10.0.0.0/16"
 
-  # VPC ID (to be defined)
-  vpc_id = ""
+  # VPC ID (provide the correct value)
+  vpc_id = "fdgfd"
 
-  # Log retention period in days
+  # VPC log retention period in days
   vpc_log_retention = 90
 
   # Source of the module
