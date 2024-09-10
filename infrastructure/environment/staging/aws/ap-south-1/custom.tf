@@ -1,45 +1,52 @@
-resource "aws_eks_node_group" "node_group" {
-  ami_type        = var.ami_type
-  capacity_type   = var.spot_instances ? "SPOT" : "ON_DEMAND"
-  cluster_name    = aws_eks_cluster.cluster.name
-  depends_on = [
-    aws_iam_role_policy_attachment.node_group_AmazonEKSWorkerNodePolicy,
-    aws_iam_role_policy_attachment.node_group_AmazonEKS_CNI_Policy,
-    aws_iam_role_policy_attachment.node_group_AmazonEC2ContainerRegistryReadOnly,
-  ]
-  disk_size       = length(var.node_launch_template) > 0 ? null : var.node_disk_size
+# This is a Terraform configuration for deploying an AWS EC2 instance
 
-  dynamic "launch_template" {
-    for_each = length(aws_launch_template.eks_node) > 0 ? [1] : []
-    content {
-      id      = aws_launch_template.eks_node[0].id
-      version = aws_launch_template.eks_node[0].latest_version
-    }
-  }
+provider "aws" {
+  region = "us-west-2"
+}
 
-  instance_types = length(var.node_launch_template) > 0 ? [] : [var.node_instance_type]
+resource "aws_instance" "my_instance" {
+  ami           = "ami-0c55b159cbfafe1f0"
+  instance_type = "t2.micro"
 
-  labels = {
-    node_group_name = "opta-${var.layer_name}-default"
-  }
+  # Security group configuration
+  vpc_security_group_ids = ["sg-abcdefgh"]
 
-  lifecycle {
-    create_before_destroy = true
-    ignore_changes        = [scaling_config[0].desired_size, "node_group_name", "subnet_ids"]
-  }
+  # Key pair name for SSH access
+  key_name = "my-key-pair"
 
-  node_group_name = "opta-${var.layer_name}-default-${random_id.key_suffix.hex}"
-  node_role_arn   = aws_iam_role.node_group.arn
-
-  scaling_config {
-    desired_size = max(var.min_nodes, 1)
-    max_size     = var.max_nodes
-    min_size     = var.min_nodes
-  }
-
-  subnet_ids = aws_eks_cluster.cluster.vpc_config[0].subnet_ids
-
+  # Tags for the instance
   tags = {
-    terraform = "true"
+    Name = "MyInstance"
+    Env  = "Development"
   }
+}
+
+resource "aws_security_group" "allow_ssh" {
+  name        = "allow_ssh"
+  description = "Allow SSH inbound traffic"
+
+  ingress {
+    description = "SSH from VPC"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1" # Allows all traffic
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+output "instance_id" {
+  description = "The ID of the EC2 instance"
+  value       = aws_instance.my_instance.id
+}
+
+output "public_ip" {
+  description = "The public IP address of the EC2 instance"
+  value       = aws_instance.my_instance.public_ip
 }
