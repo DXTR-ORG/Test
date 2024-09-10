@@ -1,43 +1,55 @@
-provider "aws" {
-  region = "us-west-2"
+# Main virtual network resource in Azure
+resource "azurerm_virtual_network" "main" {
+  name                = "mainVnet"
+  address_space       = ["10.0.0.0/16"]
+  location            = "West US"
+  resource_group_name = azurerm_resource_group.main.name
 }
 
-resource "aws_instance" "example" {
-  ami           = "ami-0c55b159cbfafe1f0"
-  instance_type = "t2.micro"
-
-  tags = {
-    Name = "example-instance"
-  }
+# Resource group
+resource "azurerm_resource_group" "main" {
+  name     = "main-resources"
+  location = "West US"
 }
 
-resource "aws_s3_bucket" "example" {
-  bucket = "my-tf-test-bucket"
-  acl    = "private"
-
-  tags = {
-    Name        = "example-bucket"
-    Environment = "Dev"
-  }
+# Subnet resource within the virtual network
+resource "azurerm_subnet" "subnet" {
+  name                 = "main-subnet"
+  resource_group_name  = azurerm_resource_group.main.name
+  virtual_network_name = azurerm_virtual_network.main.name
+  address_prefixes     = ["10.0.1.0/24"]
 }
 
-# Create a security group
-resource "aws_security_group" "example" {
-  name        = "example-sg"
-  description = "Example security group"
-  vpc_id      = "vpc-123456"
+# Network security group
+resource "azurerm_network_security_group" "nsg" {
+  name                = "main-nsg"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+}
 
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+# Security group rule for allowing HTTP
+resource "azurerm_network_security_rule" "http" {
+  name                        = "allow-http"
+  priority                    = 100
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "80"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "*"
+  resource_group_name         = azurerm_resource_group.main.name
+  network_security_group_name = azurerm_network_security_group.nsg.name
+}
 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+# Associate the network security group with the subnet
+resource "azurerm_subnet_network_security_group_association" "subnet_nsg" {
+  subnet_id                 = azurerm_subnet.subnet.id
+  network_security_group_id = azurerm_network_security_group.nsg.id
+}
+
+# Output the Virtual Network ID
+output "vnet_id" {
+  description = "ID of the main Virtual Network"
+  value       = azurerm_virtual_network.main.id
 }
