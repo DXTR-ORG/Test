@@ -1,58 +1,58 @@
-module "aws_eks" {
-  # Type of AMI to use for the EKS nodes
+module "AWS_EKS" {
+  # Amazon Machine Image
   ami_type = "AL2_x86_64"
 
-  # Name of the EKS cluster
+  # EKS Cluster name
   cluster_name = "ap-south-1"
 
-  # Security groups for the EKS control plane
+  # Control Plane Security Groups
   control_plane_security_groups = []
 
-  # Log retention period for EKS logs (in days)
+  # EKS Log Retention (in days)
   eks_log_retention = 7
 
-  # Environment name for metrics
+  # Enable Metrics (Environment name)
   enable_metrics = "staging-ap-south-1"
 
-  # Identifier for the environment
+  # Environment name
   env_name = "staging-ap-south-1"
 
-  # Kubernetes version for the EKS cluster
+  # Kubernetes Version
   k8s_version = "1.21"
 
-  # ARN of the KMS account key for encryption
+  # KMS Account Key ARN (Specify the ARN here)
   kms_account_key_arn = ""
 
-  # Layer name for the EKS cluster
+  # Layer name
   layer_name = "staging-ap-south-1"
 
-  # Maximum number of nodes in the EKS cluster
+  # Maximum number of nodes
   max_nodes = 5
 
-  # Minimum number of nodes in the EKS cluster
+  # Minimum number of nodes
   min_nodes = 3
 
-  # Name of the module
+  # Module name
   module_name = "AWS EKS"
 
-  # Disk size for each EKS node (in GB)
+  # Node Disk Size (in GB)
   node_disk_size = 20
 
-  # Instance type for the EKS nodes
+  # Node Instance Type
   node_instance_type = "t3.medium"
 
-  # Launch template for the EKS nodes
+  # Node Launch Template (Specify the launch template here)
   node_launch_template = {}
 
-  # IDs of the private subnets
+  # Private Subnet IDs (Specify the subnet IDs here)
   private_subnet_ids = []
 
-  # Use spot instances or not
+  # Use Spot Instances
   spot_instances = false
 
-  # VPC ID for the EKS cluster
+  # VPC ID (Specify the VPC ID here)
   vpc_id = ""
 
-  # Source of the EKS module
+  # Source of the module
   source = "git::https://github.com/thesaas-company/terraform-cloud-cops.git//modules/aws_eks?ref=main"
 }
