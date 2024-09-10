@@ -1,55 +1,51 @@
-# Main virtual network resource in Azure
-resource "azurerm_virtual_network" "main" {
-  name                = "mainVnet"
-  address_space       = ["10.0.0.0/16"]
-  location            = "West US"
-  resource_group_name = azurerm_resource_group.main.name
-}
+resource "aws_eks_node_group" "node_group" {
+  ami_type     = var.ami_type
+  capacity_type = var.spot_instances ? "SPOT" : "ON_DEMAND"
+  cluster_name  = aws_eks_cluster.cluster.name
 
-# Resource group
-resource "azurerm_resource_group" "main" {
-  name     = "main-resources"
-  location = "West US"
-}
+  depends_on = [
+    aws_iam_role_policy_attachment.node_group_AmazonEKSWorkerNodePolicy,
+    aws_iam_role_policy_attachment.node_group_AmazonEKS_CNI_Policy,
+    aws_iam_role_policy_attachment.node_group_AmazonEC2ContainerRegistryReadOnly
+  ]
 
-# Subnet resource within the virtual network
-resource "azurerm_subnet" "subnet" {
-  name                 = "main-subnet"
-  resource_group_name  = azurerm_resource_group.main.name
-  virtual_network_name = azurerm_virtual_network.main.name
-  address_prefixes     = ["10.0.1.0/24"]
-}
+  disk_size = length(var.node_launch_template) > 0 ? null : var.node_disk_size
 
-# Network security group
-resource "azurerm_network_security_group" "nsg" {
-  name                = "main-nsg"
-  location            = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
-}
+  dynamic "launch_template" {
+    for_each = length(aws_launch_template.eks_node) > 0 ? [1] : []
+    content {
+      id      = aws_launch_template.eks_node[0].id
+      version = aws_launch_template.eks_node[0].latest_version
+    }
+  }
 
-# Security group rule for allowing HTTP
-resource "azurerm_network_security_rule" "http" {
-  name                        = "allow-http"
-  priority                    = 100
-  direction                   = "Inbound"
-  access                      = "Allow"
-  protocol                    = "Tcp"
-  source_port_range           = "*"
-  destination_port_range      = "80"
-  source_address_prefix       = "*"
-  destination_address_prefix  = "*"
-  resource_group_name         = azurerm_resource_group.main.name
-  network_security_group_name = azurerm_network_security_group.nsg.name
-}
+  instance_types = length(var.node_launch_template) > 0 ? [] : [var.node_instance_type]
 
-# Associate the network security group with the subnet
-resource "azurerm_subnet_network_security_group_association" "subnet_nsg" {
-  subnet_id                 = azurerm_subnet.subnet.id
-  network_security_group_id = azurerm_network_security_group.nsg.id
-}
+  labels = {
+    node_group_name = "opta-${var.layer_name}-default"
+  }
 
-# Output the Virtual Network ID
-output "vnet_id" {
-  description = "ID of the main Virtual Network"
-  value       = azurerm_virtual_network.main.id
+  lifecycle {
+    create_before_destroy = true
+    ignore_changes = [
+      scaling_config[0].desired_size,
+      node_group_name,
+      subnet_ids
+    ]
+  }
+
+  node_group_name = "opta-${var.layer_name}-default-${random_id.key_suffix.hex}"
+  node_role_arn   = aws_iam_role.node_group.arn
+
+  scaling_config {
+    desired_size = max(var.min_nodes, 1)
+    max_size     = var.max_nodes
+    min_size     = var.min_nodes
+  }
+
+  subnet_ids = aws_eks_cluster.cluster.vpc_config[0].subnet_ids
+
+  tags = {
+    terraform = "true"
+  }
 }
