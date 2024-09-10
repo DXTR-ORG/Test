@@ -1,49 +1,58 @@
-module "aws_eks" {
-  ami_type                       = "AL2_x86_64"
-  cluster_name                   = "TSC_REGION_NAME"
-  control_plane_security_groups  = []
-  eks_log_retention              = 7
-  enable_metrics                 = "TSC_ENVIRONMENT_NAME-TSC_REGION_NAME"
-  env_name                       = "TSC_ENVIRONMENT_NAME-TSC_REGION_NAME"
-  k8s_version                    = "1.21"
-  kms_account_key_arn            = ""  # Add the value here
-  layer_name                     = "TSC_ENVIRONMENT_NAME-TSC_REGION_NAME"
-  max_nodes                      = 5
-  min_nodes                      = 3
-  module_name                    = "AWS EKS"
-  node_disk_size                 = 20
-  node_instance_type             = "t3.medium"
-  node_launch_template           = {}
-  private_subnet_ids             = []  # Add the values here
-  spot_instances                 = false
-  vpc_id                         = ""  # Add the value here
-  source                         = "git::https://github.com/thesaas-company/terraform-cloud-cops.git//modules/aws_eks?ref=main"
-}
+module "AWS_EKS" {
+  # Type of Amazon Machine Image (AMI) for the nodes
+  ami_type = "AL2_x86_64"
 
-output "k8s_ca_data" {
-  value = module.aws_eks.k8s_ca_data
-}
+  # Name of the EKS cluster
+  cluster_name = "ap-south-1"
 
-output "k8s_cluster_name" {
-  value = module.aws_eks.k8s_cluster_name
-}
+  # Security groups associated with the EKS control plane
+  control_plane_security_groups = []
 
-output "k8s_endpoint" {
-  value = module.aws_eks.k8s_endpoint
-}
+  # Number of days to retain EKS logs
+  eks_log_retention = 7
 
-output "k8s_node_group_security_id" {
-  value = module.aws_eks.k8s_node_group_security_id
-}
+  # Metrics enabled for the EKS cluster
+  enable_metrics = "staging-ap-south-1"
 
-output "k8s_openid_provider_arn" {
-  value = module.aws_eks.k8s_openid_provider_arn
-}
+  # Environment name
+  env_name = "staging-ap-south-1"
 
-output "k8s_openid_provider_url" {
-  value = module.aws_eks.k8s_openid_provider_url
-}
+  # Kubernetes version for the EKS cluster
+  k8s_version = "1.21"
 
-output "k8s_version" {
-  value = module.aws_eks.k8s_version
+  # KMS account key ARN for EKS encryption (replace with actual ARN)
+  kms_account_key_arn = ""
+
+  # Name of the layer
+  layer_name = "staging-ap-south-1"
+
+  # Maximum number of nodes in the EKS cluster
+  max_nodes = 5
+
+  # Minimum number of nodes in the EKS cluster
+  min_nodes = 3
+
+  # Module name
+  module_name = "AWS_EKS"
+
+  # Disk size for the nodes in GB
+  node_disk_size = 20
+
+  # Instance type for the nodes
+  node_instance_type = "t3.medium"
+
+  # Launch template for the nodes
+  node_launch_template = {}
+
+  # Private subnet IDs for the VPC (replace with actual subnet IDs)
+  private_subnet_ids = []
+
+  # Enable or disable spot instances
+  spot_instances = false
+
+  # ID of the VPC (replace with actual VPC ID)
+  vpc_id = ""
+
+  # Source of the Terraform module
+  source = "git::https://github.com/thesaas-company/terraform-cloud-cops.git//modules/aws_eks?ref=main"
 }
