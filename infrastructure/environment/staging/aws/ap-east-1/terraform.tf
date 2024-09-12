@@ -2,9 +2,9 @@ terraform {
   required_version = ">= 1.3.0"
 
   backend "s3" {
-    bucket  = "staging-ap-east-1-tfstate"
-    key     = "staging-ap-east-1.tfstate"
-    region  = "ap-east-1"
+    bucket = "staging-ap-east-1-tfstate"
+    key    = "Testing.tfstate"
+    region = "ap-east-1"
     encrypt = true
   }
 
