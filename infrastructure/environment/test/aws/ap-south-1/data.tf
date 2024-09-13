@@ -1,11 +1,21 @@
-data "aws_caller_identity" "current" {}
+"data" "aws_caller_identity" "provider" {}
 
-data "aws_region" "current" {}
+"data" "aws_region" "provider" {}
 
-# Retrieves information about the AWS account and region
-#
-# The data.aws_caller_identity.current resource gathers details
-# related to the AWS account currently being utilized.
-#
-# The data.aws_region.current resource fetches information about
-# the region configuration defined in the provider block.
+"data" "aws_eks_cluster_auth" "k8s" {
+  "name" = "${data.terraform_remote_state.parent.outputs.k8s_cluster_name}"
+}
+
+"data" "terraform_remote_state" "parent" {
+  "basckend" = "s3"
+
+  "config" = {
+    "bucket" = "test-ap-south-1-tfstate"
+
+    "key" = "test-ap-south-1.tfstate"
+
+    "region" = "ap-south-1"
+
+    "encrypt" = true
+  }
+}
