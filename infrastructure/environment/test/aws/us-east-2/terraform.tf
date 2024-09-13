@@ -20,3 +20,7 @@ terraform {
     }
   }
 }
+
+# This Terraform configuration defines the required version of Terraform,
+# configures the S3 backend for storing the state file,
+# and specifies the required providers with their respective sources and versions.
