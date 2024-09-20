@@ -1,21 +1,11 @@
-"data" "aws_caller_identity" "provider" {}
+data "aws_caller_identity" "current" {}
 
-"data" "aws_region" "provider" {}
+data "aws_region" "current" {}
 
-"data" "aws_eks_cluster_auth" "k8s" {
-  "name" = "${data.terraform_remote_state.parent.outputs.k8s_cluster_name}"
+# Fetch the AWS Account ID and ARN for the current user
+data "aws_caller_identity" "current" {
 }
 
-"data" "terraform_remote_state" "parent" {
-  "basckend" = "s3"
-
-  "config" = {
-    "bucket" = "test-ap-south-1-tfstate"
-
-    "key" = "test-ap-south-1.tfstate"
-
-    "region" = "ap-south-1"
-
-    "encrypt" = true
-  }
+# Fetch the current AWS region
+data "aws_region" "current" {
 }
